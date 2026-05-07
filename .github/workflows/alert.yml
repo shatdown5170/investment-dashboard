@@ -1,1 +1,29 @@
+name: QQQ 전략 알림봇
 
+"on":
+  schedule:
+    # 매일 오전 7시 KST (미장 마감 후) = UTC 22:00 (전날)
+    - cron: '0 22 * * 1-5'
+  workflow_dispatch: # 수동 실행 버튼도 활성화
+
+jobs:
+  check-signals:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 코드 체크아웃
+        uses: actions/checkout@v4
+
+      - name: Python 설치
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: 라이브러리 설치
+        run: pip install yfinance requests numpy pandas
+
+      - name: 신호 체크 및 알림 발송
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python check_signals.py
