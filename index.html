@@ -8,155 +8,89 @@
 <meta name="apple-mobile-web-app-title" content="투자 대시보드">
 <meta name="theme-color" content="#ffffff">
 <title>QLD·TQQQ 투자 전략 대시보드</title>
-<link rel="preconnect" href="https://cdn.jsdelivr.net">
 <style>
   @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
   *{box-sizing:border-box;margin:0;padding:0}
   html{-webkit-text-size-adjust:100%}
-  body{
-    background:#fff;
-    color:#37352f;
-    font-family:'Pretendard',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
-    font-size:15px;
-    line-height:1.5;
-    padding:20px 16px 40px;
-    min-height:100vh;
-    max-width:680px;
-    margin:0 auto;
-  }
-
-  /* Header */
+  body{background:#fff;color:#37352f;font-family:'Pretendard',-apple-system,BlinkMacSystemFont,sans-serif;font-size:15px;line-height:1.5;padding:20px 16px 48px;max-width:680px;margin:0 auto}
   .head{display:flex;align-items:center;gap:12px;margin-bottom:8px}
   .head-icon{width:44px;height:44px;border-radius:50%;background:#f1f1ef;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
-  .head-title{font-size:24px;font-weight:700;color:#37352f;letter-spacing:-0.4px}
+  .head-title{font-size:24px;font-weight:700;letter-spacing:-0.4px}
   .head-sub{font-size:13px;color:#9b9a97;margin-top:2px}
-
-  /* Tabs */
-  .tabs{display:flex;gap:4px;border-bottom:1px solid #ebecec;margin:18px 0 16px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .tabs{display:flex;gap:4px;border-bottom:1px solid #ebecec;margin:18px 0 16px;overflow-x:auto;scrollbar-width:none}
   .tabs::-webkit-scrollbar{display:none}
-  .tab{padding:8px 12px;font-size:14px;color:#787774;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;transition:.15s;font-weight:500}
+  .tab{padding:8px 12px;font-size:14px;color:#787774;border-bottom:2px solid transparent;white-space:nowrap;font-weight:500}
   .tab.active{color:#37352f;border-color:#37352f}
-
-  /* Refresh Button */
-  .refresh-btn{
-    width:100%;background:#fff;border:1px solid #ebecec;
-    color:#37352f;font-family:'Pretendard',sans-serif;font-size:14px;font-weight:500;
-    padding:10px 14px;border-radius:6px;cursor:pointer;margin-bottom:18px;
-    transition:.15s;display:flex;align-items:center;justify-content:center;gap:8px;
-  }
+  .refresh-btn{width:100%;background:#fff;border:1px solid #ebecec;color:#37352f;font-family:'Pretendard',sans-serif;font-size:14px;font-weight:500;padding:10px 14px;border-radius:6px;cursor:pointer;margin-bottom:18px;transition:.15s;display:flex;align-items:center;justify-content:center;gap:8px}
   .refresh-btn:hover{background:#f7f7f5}
   .refresh-btn:disabled{opacity:.5;cursor:not-allowed}
-
-  /* Featured Action Card */
-  .featured-card{background:#f7f6f3;border-radius:10px;padding:18px 20px;margin-bottom:18px;border:1px solid #ebecec;transition:.2s}
+  .featured-card{border-radius:10px;padding:18px 20px;margin-bottom:18px;border:1px solid #ebecec;background:#f7f6f3;transition:.2s}
   .featured-card.buy{background:#edf3ec;border-color:#cce0cc}
-  .featured-card.sell{background:#fbecec;border-color:#e8c7c7}
   .featured-card.hold{background:#f1f3f8;border-color:#d3dae8}
   .featured-card.warn{background:#faf3dd;border-color:#e9d9a8}
   .featured-tag{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:4px;letter-spacing:.3px;margin-bottom:8px}
   .tag-buy{background:#dceedc;color:#3d6b3d}
-  .tag-sell{background:#f5d6d6;color:#8a3a3a}
   .tag-hold{background:#dde4f1;color:#3a4f7a}
   .tag-warn{background:#f0e3b9;color:#76591f}
   .featured-title{font-size:17px;font-weight:700;color:#37352f;margin-bottom:6px;letter-spacing:-0.2px}
   .featured-desc{font-size:13px;color:#787774;line-height:1.6}
-
-  /* KPI Grid */
   .kpi-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:18px}
-  @media(min-width:560px){.kpi-grid{grid-template-columns:repeat(4,1fr)}}
+  @media(min-width:540px){.kpi-grid{grid-template-columns:repeat(4,1fr)}}
   .kpi{background:#fff;border:1px solid #ebecec;border-radius:8px;padding:12px 14px}
-  .kpi-label{font-size:11px;color:#9b9a97;font-weight:500;letter-spacing:.3px;margin-bottom:6px;text-transform:uppercase}
-  .kpi-val{font-size:20px;font-weight:700;color:#37352f;letter-spacing:-0.3px;line-height:1.1}
+  .kpi-label{font-size:11px;color:#9b9a97;font-weight:500;letter-spacing:.3px;text-transform:uppercase;margin-bottom:6px}
+  .kpi-val{font-size:20px;font-weight:700;letter-spacing:-0.3px;line-height:1.1}
   .kpi-sub{font-size:11px;color:#9b9a97;margin-top:4px}
-  .kpi-val.up{color:#0f7b3d}
-  .kpi-val.down{color:#c5302f}
-  .kpi-val.warn{color:#bb7700}
-
-  /* Section */
+  .up{color:#0f7b3d} .down{color:#c5302f} .warn-c{color:#bb7700}
   .section{margin-bottom:18px}
-  .section-head{display:flex;align-items:center;gap:8px;margin-bottom:10px;padding-left:2px}
-  .section-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-  .dot-purple{background:#a589d1}
-  .dot-orange{background:#e89968}
-  .dot-blue{background:#6e9bd1}
-  .dot-green{background:#74a878}
-  .dot-pink{background:#d18cb1}
-  .section-title{font-size:13px;font-weight:600;color:#37352f}
+  .section-head{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+  .s-dot{width:8px;height:8px;border-radius:50%}
+  .d-orange{background:#e89968} .d-blue{background:#6e9bd1} .d-pink{background:#d18cb1} .d-green{background:#74a878}
+  .section-title{font-size:13px;font-weight:600}
   .section-count{background:#f1f1ef;color:#787774;font-size:11px;font-weight:600;padding:1px 7px;border-radius:10px;margin-left:2px}
-
-  /* Items */
   .item-list{display:flex;flex-direction:column;gap:6px}
   .item{background:#fff;border:1px solid #ebecec;border-radius:6px;padding:10px 12px;display:flex;align-items:center;gap:10px;transition:.15s}
   .item:hover{background:#fafafa}
   .item-emoji{font-size:18px;flex-shrink:0;width:24px;text-align:center}
   .item-body{flex:1;min-width:0}
-  .item-name{font-size:14px;font-weight:500;color:#37352f;margin-bottom:2px}
+  .item-name{font-size:14px;font-weight:500;margin-bottom:2px}
   .item-meta{font-size:12px;color:#9b9a97}
-  .item-tag{display:inline-block;font-size:10px;font-weight:600;padding:2px 6px;border-radius:3px;background:#f1f1ef;color:#787774;margin-left:6px}
-  .item-tag.urgent{background:#fbecec;color:#c5302f}
-  .item-tag.active{background:#faf3dd;color:#76591f}
-  .item-tag.done{background:#edf3ec;color:#3d6b3d}
-  .item-action{
-    flex-shrink:0;font-size:12px;color:#787774;background:transparent;
-    border:1px solid #ebecec;padding:6px 10px;border-radius:5px;cursor:pointer;
-    font-family:'Pretendard',sans-serif;transition:.15s;font-weight:500;
-    white-space:nowrap;min-height:32px;
-  }
-  .item-action:hover{background:#f7f7f5;color:#37352f}
-  .item-action.completed{background:#edf3ec;color:#3d6b3d;border-color:#c8dcc8}
-
-  /* Input Cards */
+  .i-tag{display:inline-block;font-size:10px;font-weight:600;padding:2px 6px;border-radius:3px;background:#f1f1ef;color:#787774;margin-left:6px}
+  .i-tag.urgent{background:#fbecec;color:#c5302f}
+  .i-tag.active{background:#faf3dd;color:#76591f}
+  .i-tag.done{background:#edf3ec;color:#3d6b3d}
+  .i-btn{flex-shrink:0;font-size:12px;color:#787774;background:#fff;border:1px solid #ebecec;padding:6px 10px;border-radius:5px;cursor:pointer;font-family:'Pretendard',sans-serif;font-weight:500;white-space:nowrap;min-height:32px;transition:.15s}
+  .i-btn:hover{background:#f7f7f5;color:#37352f}
+  .i-btn.done{background:#edf3ec;color:#3d6b3d;border-color:#c8dcc8}
   .input-card{background:#fff;border:1px solid #ebecec;border-radius:8px;padding:14px 16px;margin-bottom:8px}
-  .input-section-label{font-size:11px;font-weight:600;color:#9b9a97;letter-spacing:.5px;text-transform:uppercase;margin-bottom:12px}
-  .input-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
-  .input-row:last-of-type{margin-bottom:0}
-  .input-label{font-size:12px;color:#787774;width:120px;flex-shrink:0;font-weight:500}
-  input[type=number]{
-    flex:1;background:#fff;border:1px solid #ebecec;border-radius:5px;
-    padding:8px 10px;font-family:'Pretendard',sans-serif;font-size:14px;
-    color:#37352f;outline:none;transition:.15s;min-height:36px;
-    -moz-appearance:textfield;
-  }
-  input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appearance:none}
-  input:focus{border-color:#37352f;box-shadow:0 0 0 2px rgba(55,53,47,.08)}
+  .i-lbl{font-size:11px;font-weight:600;color:#9b9a97;letter-spacing:.5px;text-transform:uppercase;margin-bottom:12px}
+  .i-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+  .i-row:last-of-type{margin-bottom:0}
+  .i-name{font-size:12px;color:#787774;width:120px;flex-shrink:0;font-weight:500}
+  input[type=number]{flex:1;background:#fff;border:1px solid #ebecec;border-radius:5px;padding:8px 10px;font-family:'Pretendard',sans-serif;font-size:14px;color:#37352f;outline:none;transition:.15s;min-height:36px;-moz-appearance:textfield}
+  input::-webkit-inner-spin-button,input::-webkit-outer-spin-button{-webkit-appearance:none}
+  input:focus{border-color:#37352f}
   input::placeholder{color:#c4c4c0}
-  .small-sub{font-size:11px;color:#c4c4c0;margin-top:10px;line-height:1.5}
-
-  /* Result bars */
-  .result-bar{margin-top:8px;padding:10px 12px;border-radius:6px;background:#f7f6f3;font-size:13px;display:flex;justify-content:space-between;align-items:center}
-  .result-bar.success{background:#edf3ec;color:#3d6b3d}
-  .result-bar.warn{background:#faf3dd;color:#76591f}
-  .result-bar.danger{background:#fbecec;color:#c5302f}
-  .result-label{color:#787774;font-size:12px}
-  .result-val{font-weight:700;font-size:14px}
-
-  /* Progress */
-  .progress-wrap{margin-top:10px}
-  .progress-bar{height:6px;background:#f1f1ef;border-radius:3px;overflow:hidden}
-  .progress-fill{height:100%;border-radius:3px;transition:width .5s ease}
-  .progress-text{font-size:11px;color:#9b9a97;margin-top:4px;display:flex;justify-content:space-between}
-
-  /* Sell result */
-  .sell-detail{display:block;background:#f7f6f3;border-radius:6px;padding:12px;margin-top:8px}
-  .sell-detail.warn-box{background:#faf3dd}
-  .sell-detail.danger-box{background:#fbecec}
-
-  /* Footer card */
+  .hint{font-size:11px;color:#c4c4c0;margin-top:10px;line-height:1.5}
+  .r-bar{margin-top:8px;padding:10px 12px;border-radius:6px;background:#f7f6f3;font-size:13px;display:flex;justify-content:space-between;align-items:center}
+  .r-bar.suc{background:#edf3ec} .r-bar.wrn{background:#faf3dd} .r-bar.dng{background:#fbecec}
+  .r-lbl{font-size:12px;color:#787774}
+  .r-val{font-weight:700;font-size:14px}
+  .prog-wrap{margin-top:10px}
+  .prog-bar{height:6px;background:#f1f1ef;border-radius:3px;overflow:hidden}
+  .prog-fill{height:100%;border-radius:3px;transition:width .5s ease}
+  .prog-text{font-size:11px;color:#9b9a97;margin-top:4px;display:flex;justify-content:space-between}
+  .sell-box{display:block;background:#f7f6f3;border-radius:6px;padding:12px;margin-top:8px}
+  .sell-box.wrn{background:#faf3dd} .sell-box.dng{background:#fbecec}
   .footer-card{background:#f7f6f3;border-radius:8px;padding:16px;margin-top:18px;border:1px solid #ebecec}
-  .footer-title{font-size:13px;font-weight:600;color:#37352f;margin-bottom:4px;display:flex;align-items:center;gap:8px}
-  .footer-amount{font-size:20px;font-weight:700;color:#37352f;margin:6px 0 4px;letter-spacing:-0.3px}
-  .footer-desc{font-size:12px;color:#787774;line-height:1.6}
-
-  /* Divider */
+  .f-title{font-size:13px;font-weight:600;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+  .f-amt{font-size:20px;font-weight:700;margin:6px 0 4px;letter-spacing:-0.3px}
+  .f-desc{font-size:12px;color:#787774;line-height:1.6}
   hr{border:none;border-top:1px solid #f1f1ef;margin:18px 0}
-
-  /* Loading spinner */
   .loading{display:inline-block;width:14px;height:14px;border:2px solid #ebecec;border-top-color:#37352f;border-radius:50%;animation:spin .8s linear infinite;vertical-align:middle}
   @keyframes spin{to{transform:rotate(360deg)}}
-
-  /* Toast */
-  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#37352f;color:#fff;padding:10px 18px;border-radius:8px;font-size:13px;font-weight:500;opacity:0;transition:.3s;pointer-events:none;white-space:nowrap;z-index:999}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#37352f;color:#fff;padding:10px 18px;border-radius:8px;font-size:13px;font-weight:500;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap;z-index:999}
   .toast.show{opacity:1}
+  .manual-wrap{margin-top:18px}
 </style>
 </head>
 <body>
@@ -165,7 +99,7 @@
   <div class="head-icon">📊</div>
   <div>
     <div class="head-title">투자 전략 대시보드</div>
-    <div class="head-sub" id="updateTime">QQQ 데이터를 불러와주세요</div>
+    <div class="head-sub" id="updateTime">QQQ 데이터를 불러오는 중...</div>
   </div>
 </div>
 
@@ -175,97 +109,36 @@
   <div class="tab">💰 매도 신호</div>
 </div>
 
-<!-- 새로고침 버튼 -->
 <button class="refresh-btn" id="fetchBtn" onclick="fetchData()">
   <span id="fetchIcon">↻</span>
-  <span id="fetchText">QQQ 실시간 데이터 불러오기</span>
+  <span id="fetchText">새로고침</span>
 </button>
 
-<!-- 오늘의 액션 -->
 <div class="featured-card hold" id="actionBox">
-  <div class="featured-tag tag-hold" id="actionTag">대기 중</div>
-  <div class="featured-title" id="actionTitle">데이터를 불러와주세요</div>
-  <div class="featured-desc" id="actionSub">위 버튼을 눌러 QQQ 현재 상태를 분석하면 오늘 취해야 할 액션을 알려드립니다.</div>
+  <div class="featured-tag tag-hold" id="actionTag">불러오는 중</div>
+  <div class="featured-title" id="actionTitle">QQQ 데이터 분석 중...</div>
+  <div class="featured-desc" id="actionSub">잠시 기다려주세요.</div>
 </div>
 
-<!-- 핵심 지표 4개 -->
 <div class="kpi-grid">
-  <div class="kpi">
-    <div class="kpi-label">QQQ 현재가</div>
-    <div class="kpi-val" id="qqprice">—</div>
-    <div class="kpi-sub" id="qqdate">데이터 없음</div>
-  </div>
-  <div class="kpi">
-    <div class="kpi-label">MA200 대비</div>
-    <div class="kpi-val" id="ma200diff">—</div>
-    <div class="kpi-sub" id="ma200val">MA200: —</div>
-  </div>
-  <div class="kpi">
-    <div class="kpi-label">52주 고점 대비</div>
-    <div class="kpi-val" id="drawdown">—</div>
-    <div class="kpi-sub" id="highval">고점: —</div>
-  </div>
-  <div class="kpi">
-    <div class="kpi-label">RSI (14일)</div>
-    <div class="kpi-val" id="rsiVal">—</div>
-    <div class="kpi-sub" id="rsiStatus">데이터 없음</div>
-  </div>
+  <div class="kpi"><div class="kpi-label">QQQ 현재가</div><div class="kpi-val" id="qqprice">—</div><div class="kpi-sub" id="qqdate">—</div></div>
+  <div class="kpi"><div class="kpi-label">MA200 대비</div><div class="kpi-val" id="ma200diff">—</div><div class="kpi-sub" id="ma200val">MA200: —</div></div>
+  <div class="kpi"><div class="kpi-label">52주 고점 대비</div><div class="kpi-val" id="drawdown">—</div><div class="kpi-sub" id="highval">고점: —</div></div>
+  <div class="kpi"><div class="kpi-label">RSI (14일)</div><div class="kpi-val" id="rsiVal">—</div><div class="kpi-sub" id="rsiStatus">—</div></div>
 </div>
 
-<!-- TQQQ 매수 트리거 -->
 <div class="section">
-  <div class="section-head">
-    <div class="section-dot dot-orange"></div>
-    <div class="section-title">TQQQ 매수 트리거</div>
-    <div class="section-count">5</div>
-  </div>
+  <div class="section-head"><div class="s-dot d-orange"></div><div class="section-title">TQQQ 매수 트리거</div><div class="section-count">5</div></div>
   <div class="item-list">
-    <div class="item" id="t0">
-      <div class="item-emoji">⏰</div>
-      <div class="item-body">
-        <div class="item-name">1차 매수 <span class="item-tag" id="tag0">대기</span></div>
-        <div class="item-meta">QQQ MA200 이탈 · 탄약고 15%</div>
-      </div>
-      <button class="item-action" onclick="markDone(0)" id="btn0">✓ 완료</button>
-    </div>
-    <div class="item" id="t1">
-      <div class="item-emoji">📉</div>
-      <div class="item-body">
-        <div class="item-name">2차 매수 <span class="item-tag" id="tag1">대기</span></div>
-        <div class="item-meta">고점 대비 -15% 이하 · 탄약고 20%</div>
-      </div>
-      <button class="item-action" onclick="markDone(1)" id="btn1">✓ 완료</button>
-    </div>
-    <div class="item" id="t2">
-      <div class="item-emoji">🔻</div>
-      <div class="item-body">
-        <div class="item-name">3차 매수 <span class="item-tag" id="tag2">대기</span></div>
-        <div class="item-meta">고점 대비 -25% 이하 · 탄약고 25%</div>
-      </div>
-      <button class="item-action" onclick="markDone(2)" id="btn2">✓ 완료</button>
-    </div>
-    <div class="item" id="t3">
-      <div class="item-emoji">🚨</div>
-      <div class="item-body">
-        <div class="item-name">4차 매수 <span class="item-tag" id="tag3">대기</span></div>
-        <div class="item-meta">QQQ -35% + RSI ≤ 25 · 탄약고 25%</div>
-      </div>
-      <button class="item-action" onclick="markDone(3)" id="btn3">✓ 완료</button>
-    </div>
-    <div class="item" id="t4">
-      <div class="item-emoji">⚠️</div>
-      <div class="item-body">
-        <div class="item-name">장기화 모드 <span class="item-tag" id="tag4">자동 판별</span></div>
-        <div class="item-meta">MA200 아래 90일+ · 잔액 월 균등 분할</div>
-      </div>
-      <span style="font-size:11px;color:#c4c4c0;flex-shrink:0">자동</span>
-    </div>
+    <div class="item"><div class="item-emoji">⏰</div><div class="item-body"><div class="item-name">1차 매수 <span class="i-tag" id="tag0">대기</span></div><div class="item-meta">QQQ MA200 이탈 · 탄약고 15%</div></div><button class="i-btn" onclick="markDone(0)" id="btn0">✓ 완료</button></div>
+    <div class="item"><div class="item-emoji">📉</div><div class="item-body"><div class="item-name">2차 매수 <span class="i-tag" id="tag1">대기</span></div><div class="item-meta">고점 대비 -15% 이하 · 탄약고 20%</div></div><button class="i-btn" onclick="markDone(1)" id="btn1">✓ 완료</button></div>
+    <div class="item"><div class="item-emoji">🔻</div><div class="item-body"><div class="item-name">3차 매수 <span class="i-tag" id="tag2">대기</span></div><div class="item-meta">고점 대비 -25% 이하 · 탄약고 25%</div></div><button class="i-btn" onclick="markDone(2)" id="btn2">✓ 완료</button></div>
+    <div class="item"><div class="item-emoji">🚨</div><div class="item-body"><div class="item-name">4차 매수 <span class="i-tag" id="tag3">대기</span></div><div class="item-meta">QQQ -35% + RSI ≤ 25 · 탄약고 25%</div></div><button class="i-btn" onclick="markDone(3)" id="btn3">✓ 완료</button></div>
+    <div class="item"><div class="item-emoji">⚠️</div><div class="item-body"><div class="item-name">장기화 모드 <span class="i-tag" id="tag4">자동 판별</span></div><div class="item-meta">MA200 아래 90일+ · 잔액 월 균등 분할</div></div><span style="font-size:11px;color:#c4c4c0">자동</span></div>
   </div>
-
-  <!-- MA200 아래 일수 입력 -->
   <div class="input-card" style="margin-top:8px;background:#fafafa">
-    <div class="input-row" style="margin-bottom:0">
-      <div class="input-label">MA200 아래 일수</div>
+    <div class="i-row" style="margin-bottom:0">
+      <div class="i-name">MA200 아래 일수</div>
       <input type="number" id="bearDaysInput" placeholder="0" min="0" oninput="recalc()">
     </div>
   </div>
@@ -273,346 +146,326 @@
 
 <hr>
 
-<!-- 탄약고 현황 -->
 <div class="section">
-  <div class="section-head">
-    <div class="section-dot dot-blue"></div>
-    <div class="section-title">탄약고 현황 (QQQI 잔액)</div>
-  </div>
+  <div class="section-head"><div class="s-dot d-blue"></div><div class="section-title">탄약고 현황 (QQQI 잔액)</div></div>
   <div class="input-card">
-    <div class="input-section-label">QQQI 잔액 입력</div>
-    <div class="input-row" style="margin-bottom:0">
-      <div class="input-label">현재 잔액 (원)</div>
-      <input type="number" id="ammoInput" placeholder="예: 4950000" oninput="calcAmmo()">
-    </div>
+    <div class="i-lbl">QQQI 잔액 입력</div>
+    <div class="i-row" style="margin-bottom:0"><div class="i-name">현재 잔액 (원)</div><input type="number" id="ammoInput" placeholder="예: 4950000" oninput="calcAmmo()"></div>
     <div id="ammoResult"></div>
-    <div class="small-sub">매수 트리거 "✓ 완료" 체크 시 자동 차감됩니다</div>
+    <div class="hint">매수 트리거 완료 체크 시 자동 차감됩니다</div>
   </div>
 </div>
 
 <hr>
 
-<!-- TQQQ 매도 신호 -->
 <div class="section">
-  <div class="section-head">
-    <div class="section-dot dot-pink"></div>
-    <div class="section-title">TQQQ 매도 신호 체크</div>
-  </div>
+  <div class="section-head"><div class="s-dot d-pink"></div><div class="section-title">TQQQ 매도 신호 체크</div></div>
   <div class="input-card">
-    <div class="input-section-label">수익률 계산</div>
-    <div class="input-row">
-      <div class="input-label">평균 매수가 ($)</div>
-      <input type="number" id="avgCost" placeholder="예: 45.50" oninput="calcSell()" step="0.01">
-    </div>
-    <div class="input-row" style="margin-bottom:0">
-      <div class="input-label">현재가 ($)</div>
-      <input type="number" id="curPrice" placeholder="예: 68.20" oninput="calcSell()" step="0.01">
-    </div>
+    <div class="i-lbl">수익률 계산</div>
+    <div class="i-row"><div class="i-name">평균 매수가 ($)</div><input type="number" id="avgCost" placeholder="예: 45.50" oninput="calcSell()" step="0.01"></div>
+    <div class="i-row" style="margin-bottom:0"><div class="i-name">현재가 ($)</div><input type="number" id="curPrice" placeholder="예: 68.20" oninput="calcSell()" step="0.01"></div>
     <div id="sellResult"></div>
   </div>
 </div>
 
-<!-- QLD DCA 리마인더 -->
 <div class="footer-card">
-  <div class="footer-title">
-    <span>💎</span> QLD 매일 DCA — 절대 멈추지 않기
-  </div>
-  <div class="footer-amount">매일 ₩55,000 매수</div>
-  <div class="footer-desc">월 115.5만원 ÷ 21거래일. 하락장도 저가 매집 기회입니다.<br>어떤 상황에서도 절대 멈추지 마세요.</div>
+  <div class="f-title">💎 QLD 매일 DCA — 절대 멈추지 않기</div>
+  <div class="f-amt">매일 ₩55,000 매수</div>
+  <div class="f-desc">월 115.5만원 ÷ 21거래일. 하락장도 저가 매집 기회입니다.<br>어떤 상황에서도 절대 멈추지 마세요.</div>
 </div>
 
-<!-- 수동 입력 영역 (오류 시 표시) -->
-<div id="manualSection" style="display:none;margin-top:18px">
-  <div class="section-head">
-    <div class="section-dot dot-green"></div>
-    <div class="section-title">수동 데이터 입력</div>
-  </div>
+<!-- 수동 입력 (자동 실패 시) -->
+<div class="manual-wrap" id="manualSection" style="display:none">
+  <div class="section-head" style="margin-top:4px"><div class="s-dot d-green"></div><div class="section-title">수동 데이터 입력</div></div>
   <div class="input-card">
-    <div class="input-section-label">직접 입력 (investing.com / tradingview 참고)</div>
-    <div class="input-row">
-      <div class="input-label">QQQ 현재가 ($)</div>
-      <input type="number" id="m_price" placeholder="예: 480.00" oninput="manualCalc()" step="0.01">
-    </div>
-    <div class="input-row">
-      <div class="input-label">QQQ MA200 ($)</div>
-      <input type="number" id="m_ma200" placeholder="예: 460.00" oninput="manualCalc()" step="0.01">
-    </div>
-    <div class="input-row">
-      <div class="input-label">52주 고점 ($)</div>
-      <input type="number" id="m_high" placeholder="예: 540.00" oninput="manualCalc()" step="0.01">
-    </div>
-    <div class="input-row" style="margin-bottom:0">
-      <div class="input-label">RSI (14일)</div>
-      <input type="number" id="m_rsi" placeholder="예: 45" oninput="manualCalc()" min="0" max="100">
-    </div>
+    <div class="i-lbl">직접 입력 (investing.com 또는 tradingview 참고)</div>
+    <div class="i-row"><div class="i-name">QQQ 현재가 ($)</div><input type="number" id="m_price" placeholder="예: 480.00" oninput="manualCalc()" step="0.01"></div>
+    <div class="i-row"><div class="i-name">QQQ MA200 ($)</div><input type="number" id="m_ma200" placeholder="예: 460.00" oninput="manualCalc()" step="0.01"></div>
+    <div class="i-row"><div class="i-name">52주 고점 ($)</div><input type="number" id="m_high" placeholder="예: 540.00" oninput="manualCalc()" step="0.01"></div>
+    <div class="i-row" style="margin-bottom:0"><div class="i-name">RSI (14일)</div><input type="number" id="m_rsi" placeholder="예: 45" oninput="manualCalc()" min="0" max="100"></div>
   </div>
 </div>
 
-<!-- Toast 알림 -->
 <div class="toast" id="toast"></div>
 
 <script>
 let currentData = null;
-let doneStages = [false, false, false, false];
-const AMMO_PCT = [0.15, 0.20, 0.25, 0.25];
+let doneStages = [false,false,false,false];
+const AMMO_PCT = [0.15,0.20,0.25,0.25];
 
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2500);
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
 }
-
-function fmtK(n) {
-  if (n >= 100000000) return (n / 100000000).toFixed(1) + '억';
-  if (n >= 10000) return (n / 10000).toFixed(1) + '만';
+function fmtK(n){
+  if(n>=100000000) return (n/100000000).toFixed(1)+'억';
+  if(n>=10000) return (n/10000).toFixed(1)+'만';
   return Math.round(n).toLocaleString();
 }
 
-async function fetchData() {
-  const btn = document.getElementById('fetchBtn');
-  const icon = document.getElementById('fetchIcon');
-  const text = document.getElementById('fetchText');
-  btn.disabled = true;
-  icon.innerHTML = '<span class="loading"></span>';
-  text.textContent = '불러오는 중...';
+// RSI 계산 (Wilder's smoothing)
+function calcRSI(closes, period=14){
+  if(closes.length < period+1) return 50;
+  let gains=0, losses=0;
+  for(let i=1;i<=period;i++){
+    const d=closes[i]-closes[i-1];
+    if(d>0) gains+=d; else losses-=d;
+  }
+  let ag=gains/period, al=losses/period;
+  for(let i=period+1;i<closes.length;i++){
+    const d=closes[i]-closes[i-1];
+    ag=(ag*(period-1)+(d>0?d:0))/period;
+    al=(al*(period-1)+(d<0?-d:0))/period;
+  }
+  if(al===0) return 100;
+  return 100-(100/(1+ag/al));
+}
 
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        tools: [{ type: 'web_search_20250305', name: 'web_search' }],
-        system: 'You are a financial data assistant. After searching, respond with ONLY a raw JSON object. No markdown, no code blocks, no explanation. Example: {"price":480.50,"ma200":456.20,"high52w":538.40,"rsi":45.2,"date":"2025-05-07"}',
-        messages: [{
-          role: 'user',
-          content: 'Search for QQQ ETF current data today: price, 200-day SMA, 52-week high, 14-day RSI. Return ONLY JSON: {"price":number,"ma200":number,"high52w":number,"rsi":number,"date":"YYYY-MM-DD"}'
-        }]
-      })
-    });
-    const result = await res.json();
-    const text_data = result.content.filter(b => b.type === 'text').map(b => b.text).join('');
-    const clean = text_data.replace(/```json|```/g, '').trim();
-    const d = JSON.parse(clean);
-    currentData = d;
-    renderData(d);
-    document.getElementById('updateTime').textContent = '업데이트: ' + new Date().toLocaleTimeString('ko-KR');
-    showToast('✓ 데이터 업데이트 완료');
-  } catch (e) {
-    document.getElementById('manualSection').style.display = 'block';
-    document.getElementById('actionTitle').textContent = '수동 입력 모드';
-    document.getElementById('actionSub').textContent = '데이터 로드에 실패했습니다. 아래에서 직접 입력해주세요.';
+// Yahoo Finance 데이터 파싱
+function parseYahoo(json){
+  const result=json.chart.result[0];
+  const meta=result.meta;
+  const rawCloses=result.indicators.quote[0].close;
+  const closes=rawCloses.filter(c=>c!=null&&!isNaN(c));
+  if(closes.length<30) throw new Error('데이터 부족');
+
+  const price=meta.regularMarketPrice||closes[closes.length-1];
+  const high52w=meta.fiftyTwoWeekHigh||Math.max(...closes);
+  const ma200arr=closes.slice(-200);
+  const ma200=ma200arr.reduce((a,b)=>a+b,0)/ma200arr.length;
+  const rsi=calcRSI(closes.slice(-100), 14);
+  const today=new Date().toISOString().split('T')[0];
+  return {price,ma200,high52w,rsi,date:today};
+}
+
+async function fetchWithTimeout(url, ms=8000){
+  const ctrl=new AbortController();
+  const id=setTimeout(()=>ctrl.abort(),ms);
+  try{
+    const r=await fetch(url,{signal:ctrl.signal});
+    clearTimeout(id);
+    return r;
+  }catch(e){ clearTimeout(id); throw e; }
+}
+
+async function fetchData(){
+  const btn=document.getElementById('fetchBtn');
+  const icon=document.getElementById('fetchIcon');
+  const ftxt=document.getElementById('fetchText');
+  btn.disabled=true;
+  icon.innerHTML='<span class="loading"></span>';
+  ftxt.textContent='불러오는 중...';
+
+  const yahooUrl='https://query1.finance.yahoo.com/v8/finance/chart/QQQ?interval=1d&range=1y&includePrePost=false';
+
+  // CORS 프록시 우선순위 목록
+  const proxies=[
+    u=>`https://corsproxy.io/?${encodeURIComponent(u)}`,
+    u=>`https://api.allorigins.win/get?url=${encodeURIComponent(u)}`,
+    u=>`https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(u)}`,
+  ];
+
+  let data=null;
+  let lastError='';
+
+  for(const proxyFn of proxies){
+    try{
+      const url=proxyFn(yahooUrl);
+      const res=await fetchWithTimeout(url,9000);
+      if(!res.ok) continue;
+      const text=await res.text();
+      let json;
+      // allorigins는 { contents: "..." } 형식으로 감싸서 반환
+      if(text.trim().startsWith('{"contents"')){
+        const wrapper=JSON.parse(text);
+        json=JSON.parse(wrapper.contents);
+      } else {
+        json=JSON.parse(text);
+      }
+      data=parseYahoo(json);
+      break;
+    }catch(e){
+      lastError=e.message;
+      continue;
+    }
+  }
+
+  if(data){
+    currentData=data;
+    renderData(data);
+    document.getElementById('updateTime').textContent='업데이트: '+new Date().toLocaleTimeString('ko-KR');
+    showToast('✓ 실시간 데이터 업데이트 완료');
+    document.getElementById('manualSection').style.display='none';
+  } else {
+    document.getElementById('manualSection').style.display='block';
+    document.getElementById('actionTag').textContent='수동 입력';
+    document.getElementById('actionTitle').textContent='자동 로드 실패 — 수동 입력 모드';
+    document.getElementById('actionSub').textContent='네트워크 문제로 자동 로드에 실패했습니다. 아래에서 직접 수치를 입력해주세요.';
+    document.getElementById('updateTime').textContent='수동 입력 모드';
     showToast('⚠ 수동 입력 모드로 전환됩니다');
   }
 
-  btn.disabled = false;
-  icon.textContent = '↻';
-  text.textContent = '새로고침';
+  btn.disabled=false;
+  icon.textContent='↻';
+  ftxt.textContent='새로고침';
 }
 
-function manualCalc() {
-  const p = parseFloat(document.getElementById('m_price')?.value);
-  const m = parseFloat(document.getElementById('m_ma200')?.value);
-  const h = parseFloat(document.getElementById('m_high')?.value);
-  const r = parseFloat(document.getElementById('m_rsi')?.value);
-  if (p && m && h && r) {
-    currentData = { price: p, ma200: m, high52w: h, rsi: r, date: new Date().toISOString().split('T')[0] };
+function manualCalc(){
+  const p=parseFloat(document.getElementById('m_price')?.value);
+  const m=parseFloat(document.getElementById('m_ma200')?.value);
+  const h=parseFloat(document.getElementById('m_high')?.value);
+  const r=parseFloat(document.getElementById('m_rsi')?.value);
+  if(p&&m&&h&&r){
+    currentData={price:p,ma200:m,high52w:h,rsi:r,date:new Date().toISOString().split('T')[0]};
     renderData(currentData);
   }
 }
 
-function renderData(d) {
-  const { price, ma200, high52w, rsi, date } = d;
-  const aboveMA = price > ma200;
-  const maDiff = ((price - ma200) / ma200) * 100;
-  const drawdown = ((price - high52w) / high52w) * 100;
+function renderData(d){
+  const {price,ma200,high52w,rsi,date}=d;
+  const aboveMA=price>ma200;
+  const maDiff=((price-ma200)/ma200)*100;
+  const drawdown=((price-high52w)/high52w)*100;
 
-  document.getElementById('qqprice').textContent = '$' + price.toFixed(2);
-  document.getElementById('qqdate').textContent = date || '—';
+  document.getElementById('qqprice').textContent='$'+price.toFixed(2);
+  document.getElementById('qqdate').textContent=date||'—';
 
-  const maDiffEl = document.getElementById('ma200diff');
-  maDiffEl.textContent = (maDiff >= 0 ? '+' : '') + maDiff.toFixed(2) + '%';
-  maDiffEl.className = 'kpi-val ' + (aboveMA ? 'up' : 'down');
-  document.getElementById('ma200val').textContent = 'MA200: $' + ma200.toFixed(2);
+  const maDiffEl=document.getElementById('ma200diff');
+  maDiffEl.textContent=(maDiff>=0?'+':'')+maDiff.toFixed(2)+'%';
+  maDiffEl.className='kpi-val '+(aboveMA?'up':'down');
+  document.getElementById('ma200val').textContent='MA200: $'+ma200.toFixed(2);
 
-  const ddEl = document.getElementById('drawdown');
-  ddEl.textContent = drawdown.toFixed(2) + '%';
-  ddEl.className = 'kpi-val ' + (drawdown > -10 ? 'up' : drawdown > -20 ? 'warn' : 'down');
-  document.getElementById('highval').textContent = '고점: $' + high52w.toFixed(2);
+  const ddEl=document.getElementById('drawdown');
+  ddEl.textContent=drawdown.toFixed(2)+'%';
+  ddEl.className='kpi-val '+(drawdown>-10?'up':drawdown>-20?'warn-c':'down');
+  document.getElementById('highval').textContent='고점: $'+high52w.toFixed(2);
 
-  const rsiEl = document.getElementById('rsiVal');
-  rsiEl.textContent = rsi.toFixed(1);
-  rsiEl.className = 'kpi-val ' + (rsi <= 25 ? 'down' : rsi <= 40 ? 'warn' : rsi >= 70 ? 'up' : '');
-  document.getElementById('rsiStatus').textContent =
-    rsi <= 25 ? '극과매도 🚨' : rsi <= 40 ? '과매도' : rsi >= 70 ? '과매수' : '중립';
+  const rsiEl=document.getElementById('rsiVal');
+  rsiEl.textContent=rsi.toFixed(1);
+  rsiEl.className='kpi-val '+(rsi<=25?'down':rsi<=40?'warn-c':rsi>=70?'up':'');
+  document.getElementById('rsiStatus').textContent=rsi<=25?'극과매도 🚨':rsi<=40?'과매도':rsi>=70?'과매수':'중립';
 
   recalc();
 }
 
-function recalc() {
-  if (!currentData) return;
-  const { price, ma200, high52w, rsi } = currentData;
-  const aboveMA = price > ma200;
-  const drawdown = ((price - high52w) / high52w) * 100;
-  const bearDays = parseInt(document.getElementById('bearDaysInput').value) || 0;
-  const longBear = !aboveMA && bearDays >= 90;
+function recalc(){
+  if(!currentData) return;
+  const {price,ma200,high52w,rsi}=currentData;
+  const aboveMA=price>ma200;
+  const drawdown=((price-high52w)/high52w)*100;
+  const bearDays=parseInt(document.getElementById('bearDaysInput').value)||0;
+  const longBear=!aboveMA&&bearDays>=90;
 
-  const metConditions = [
-    !aboveMA,
-    drawdown <= -15,
-    drawdown <= -25,
-    drawdown <= -35 && rsi <= 25
-  ];
-
-  for (let i = 0; i < 4; i++) {
-    const tag = document.getElementById('tag' + i);
-    const btn = document.getElementById('btn' + i);
-    if (doneStages[i]) {
-      tag.textContent = '완료'; tag.className = 'item-tag done';
-      btn.textContent = '✓ 완료됨'; btn.className = 'item-action completed';
-    } else if (metConditions[i]) {
-      tag.textContent = '🔥 발동'; tag.className = 'item-tag urgent';
-      btn.textContent = '✓ 집행하기'; btn.className = 'item-action';
+  const conds=[!aboveMA, drawdown<=-15, drawdown<=-25, drawdown<=-35&&rsi<=25];
+  for(let i=0;i<4;i++){
+    const tag=document.getElementById('tag'+i);
+    const btn=document.getElementById('btn'+i);
+    if(doneStages[i]){
+      tag.textContent='완료';tag.className='i-tag done';
+      btn.textContent='✓ 완료됨';btn.className='i-btn done';
+    } else if(conds[i]){
+      tag.textContent='🔥 발동';tag.className='i-tag urgent';
+      btn.textContent='✓ 집행하기';btn.className='i-btn';
     } else {
-      tag.textContent = '대기'; tag.className = 'item-tag';
-      btn.textContent = '✓ 완료'; btn.className = 'item-action';
+      tag.textContent='대기';tag.className='i-tag';
+      btn.textContent='✓ 완료';btn.className='i-btn';
     }
   }
+  const t4=document.getElementById('tag4');
+  if(longBear){t4.textContent='🔥 발동중';t4.className='i-tag urgent';}
+  else if(!aboveMA&&bearDays>0){t4.textContent=(90-bearDays)+'일 남음';t4.className='i-tag active';}
+  else{t4.textContent='자동 판별';t4.className='i-tag';}
 
-  const tag4 = document.getElementById('tag4');
-  if (longBear) {
-    tag4.textContent = '🔥 발동중'; tag4.className = 'item-tag urgent';
-  } else if (!aboveMA && bearDays > 0) {
-    tag4.textContent = `${90 - bearDays}일 남음`; tag4.className = 'item-tag active';
-  } else {
-    tag4.textContent = '자동 판별'; tag4.className = 'item-tag';
-  }
-
-  determineAction(aboveMA, drawdown, rsi, longBear, bearDays);
+  determineAction(aboveMA,drawdown,rsi,longBear,bearDays);
   calcAmmo();
 }
 
-function determineAction(aboveMA, drawdown, rsi, longBear, bearDays) {
-  const box = document.getElementById('actionBox');
-  const tag = document.getElementById('actionTag');
-  const title = document.getElementById('actionTitle');
-  const sub = document.getElementById('actionSub');
+function determineAction(aboveMA,drawdown,rsi,longBear,bearDays){
+  const box=document.getElementById('actionBox');
+  const tag=document.getElementById('actionTag');
+  const title=document.getElementById('actionTitle');
+  const sub=document.getElementById('actionSub');
+  const s1=!aboveMA&&!doneStages[0];
+  const s2=drawdown<=-15&&!doneStages[1];
+  const s3=drawdown<=-25&&!doneStages[2];
+  const s4=drawdown<=-35&&rsi<=25&&!doneStages[3];
 
-  const s1 = !aboveMA && !doneStages[0];
-  const s2 = drawdown <= -15 && !doneStages[1];
-  const s3 = drawdown <= -25 && !doneStages[2];
-  const s4 = drawdown <= -35 && rsi <= 25 && !doneStages[3];
-
-  if (s4) {
-    box.className = 'featured-card buy'; tag.className = 'featured-tag tag-buy'; tag.textContent = '🚨 즉시 매수';
-    title.textContent = '4차 매수 — TQQQ 탄약고 전량 투입';
-    sub.textContent = `QQQ ${drawdown.toFixed(1)}%, RSI ${rsi.toFixed(1)} (극과매도). QQQI 잔액 전량 매도 후 TQQQ 매수. 역사적 저점 구간입니다.`;
-  } else if (s3) {
-    box.className = 'featured-card buy'; tag.className = 'featured-tag tag-buy'; tag.textContent = '🔥 매수 신호';
-    title.textContent = '3차 매수 — TQQQ 탄약고 25% 투입';
-    sub.textContent = `QQQ 고점 대비 ${drawdown.toFixed(1)}%. QQQI 탄약고의 25% 매도 후 TQQQ 매수. QLD DCA는 계속 진행하세요.`;
-  } else if (longBear) {
-    box.className = 'featured-card warn'; tag.className = 'featured-tag tag-warn'; tag.textContent = '⚠ 장기화';
-    title.textContent = '장기화 모드 — TQQQ 월정액 분할 매수';
-    sub.textContent = `MA200 아래 ${bearDays}일 경과. 탄약고 잔액을 4개월 균등 분할하여 매월 정액 TQQQ 매수로 전환하세요.`;
-  } else if (s2) {
-    box.className = 'featured-card buy'; tag.className = 'featured-tag tag-buy'; tag.textContent = '🔥 매수 신호';
-    title.textContent = '2차 매수 — TQQQ 탄약고 20% 투입';
-    sub.textContent = `QQQ 고점 대비 ${drawdown.toFixed(1)}%. QQQI 탄약고의 20% 매도 후 TQQQ 매수. QLD DCA는 계속 진행하세요.`;
-  } else if (s1) {
-    box.className = 'featured-card buy'; tag.className = 'featured-tag tag-buy'; tag.textContent = '🟠 매수 신호';
-    title.textContent = '1차 매수 — TQQQ 탄약고 15% 투입';
-    sub.textContent = `QQQ가 MA200 아래로 이탈했습니다. QQQI 탄약고의 15% 매도 후 TQQQ 1차 매수. QLD DCA는 계속 진행하세요.`;
-  } else if (aboveMA) {
-    box.className = 'featured-card hold'; tag.className = 'featured-tag tag-hold'; tag.textContent = '✅ 정상 구간';
-    title.textContent = 'QLD 매일 DCA 계속';
-    sub.textContent = 'QQQ가 MA200 위에 안정적으로 있습니다. TQQQ 매수 조건 미충족. QQQI 탄약고를 계속 적립하면서 QLD 매일 55,000원 매수를 유지하세요.';
+  if(s4){
+    box.className='featured-card buy';tag.className='featured-tag tag-buy';tag.textContent='🚨 즉시 매수';
+    title.textContent='4차 매수 — TQQQ 탄약고 전량 투입';
+    sub.textContent=`QQQ ${drawdown.toFixed(1)}%, RSI ${rsi.toFixed(1)} (극과매도). QQQI 잔액 전량 매도 후 TQQQ 매수. 역사적 저점 구간입니다.`;
+  } else if(s3){
+    box.className='featured-card buy';tag.className='featured-tag tag-buy';tag.textContent='🔥 매수 신호';
+    title.textContent='3차 매수 — TQQQ 탄약고 25% 투입';
+    sub.textContent=`QQQ 고점 대비 ${drawdown.toFixed(1)}%. QQQI 탄약고의 25% 매도 후 TQQQ 매수. QLD DCA는 계속 진행하세요.`;
+  } else if(longBear){
+    box.className='featured-card warn';tag.className='featured-tag tag-warn';tag.textContent='⚠ 장기화';
+    title.textContent='장기화 모드 — TQQQ 월정액 분할 매수';
+    sub.textContent=`MA200 아래 ${bearDays}일 경과. 탄약고 잔액을 4개월 균등 분할하여 매월 정액 TQQQ 매수로 전환하세요.`;
+  } else if(s2){
+    box.className='featured-card buy';tag.className='featured-tag tag-buy';tag.textContent='🔥 매수 신호';
+    title.textContent='2차 매수 — TQQQ 탄약고 20% 투입';
+    sub.textContent=`QQQ 고점 대비 ${drawdown.toFixed(1)}%. QQQI 탄약고의 20% 매도 후 TQQQ 매수. QLD DCA는 계속 진행하세요.`;
+  } else if(s1){
+    box.className='featured-card buy';tag.className='featured-tag tag-buy';tag.textContent='🟠 매수 신호';
+    title.textContent='1차 매수 — TQQQ 탄약고 15% 투입';
+    sub.textContent=`QQQ가 MA200 아래로 이탈했습니다. QQQI 탄약고의 15% 매도 후 TQQQ 1차 매수. QLD DCA는 계속 진행하세요.`;
+  } else if(aboveMA){
+    box.className='featured-card hold';tag.className='featured-tag tag-hold';tag.textContent='✅ 정상 구간';
+    title.textContent='QLD 매일 DCA 계속';
+    sub.textContent='QQQ가 MA200 위에 안정적으로 있습니다. TQQQ 매수 조건 미충족. QQQI 탄약고 계속 적립 + QLD 매일 55,000원 매수를 유지하세요.';
   } else {
-    box.className = 'featured-card hold'; tag.className = 'featured-tag tag-hold'; tag.textContent = '🔵 모니터링';
-    title.textContent = '조건 대기 중';
-    sub.textContent = '현재 상태에서 명확한 신호는 없습니다. QLD DCA만 계속 진행하세요.';
+    box.className='featured-card hold';tag.className='featured-tag tag-hold';tag.textContent='🔵 모니터링';
+    title.textContent='조건 대기 중';
+    sub.textContent='현재 상태에서 명확한 신호는 없습니다. QLD DCA만 계속 진행하세요.';
   }
 }
 
-function markDone(idx) {
-  doneStages[idx] = !doneStages[idx];
-  showToast(doneStages[idx] ? `✓ ${idx + 1}차 매수 집행 완료` : `↩ ${idx + 1}차 완료 취소`);
-  if (currentData) recalc();
-  else {
-    const tag = document.getElementById('tag' + idx);
-    const btn = document.getElementById('btn' + idx);
-    if (doneStages[idx]) {
-      tag.textContent = '완료'; tag.className = 'item-tag done';
-      btn.textContent = '✓ 완료됨'; btn.className = 'item-action completed';
-    } else {
-      tag.textContent = '대기'; tag.className = 'item-tag';
-      btn.textContent = '✓ 완료'; btn.className = 'item-action';
-    }
+function markDone(idx){
+  doneStages[idx]=!doneStages[idx];
+  showToast(doneStages[idx]?`✓ ${idx+1}차 매수 집행 완료`:`↩ ${idx+1}차 완료 취소`);
+  if(currentData) recalc();
+  else{
+    const tag=document.getElementById('tag'+idx);
+    const btn=document.getElementById('btn'+idx);
+    if(doneStages[idx]){tag.textContent='완료';tag.className='i-tag done';btn.textContent='✓ 완료됨';btn.className='i-btn done';}
+    else{tag.textContent='대기';tag.className='i-tag';btn.textContent='✓ 완료';btn.className='i-btn';}
     calcAmmo();
   }
 }
 
-function calcAmmo() {
-  const total = parseFloat(document.getElementById('ammoInput').value) || 0;
-  if (!total) { document.getElementById('ammoResult').innerHTML = ''; return; }
-  const usedPct = doneStages.reduce((sum, d, i) => sum + (d ? AMMO_PCT[i] : 0), 0);
-  const usedAmt = usedPct * total;
-  const remaining = total - usedAmt;
-  const pct = (remaining / total) * 100;
-  const fillColor = pct > 60 ? '#74a878' : pct > 30 ? '#e89968' : '#c5302f';
-  document.getElementById('ammoResult').innerHTML = `
-    <div class="result-bar" style="margin-top:12px">
-      <span class="result-label">총 탄약고</span>
-      <span class="result-val">${fmtK(total)}원</span>
-    </div>
-    <div class="result-bar" style="margin-top:6px">
-      <span class="result-label">사용된 탄약</span>
-      <span class="result-val" style="color:#c5302f">${fmtK(Math.round(usedAmt))}원</span>
-    </div>
-    <div class="result-bar success" style="margin-top:6px">
-      <span class="result-label">잔여 탄약고</span>
-      <span class="result-val">${fmtK(Math.round(remaining))}원</span>
-    </div>
-    <div class="progress-wrap">
-      <div class="progress-bar">
-        <div class="progress-fill" style="width:${pct.toFixed(0)}%;background:${fillColor}"></div>
-      </div>
-      <div class="progress-text">
-        <span>잔여 ${pct.toFixed(0)}%</span>
-        <span>사용 ${(100 - pct).toFixed(0)}%</span>
-      </div>
-    </div>
-  `;
+function calcAmmo(){
+  const total=parseFloat(document.getElementById('ammoInput').value)||0;
+  if(!total){document.getElementById('ammoResult').innerHTML='';return;}
+  const usedPct=doneStages.reduce((s,d,i)=>s+(d?AMMO_PCT[i]:0),0);
+  const usedAmt=usedPct*total;
+  const remaining=total-usedAmt;
+  const pct=(remaining/total)*100;
+  const fc=pct>60?'#74a878':pct>30?'#e89968':'#c5302f';
+  document.getElementById('ammoResult').innerHTML=`
+    <div class="r-bar" style="margin-top:12px"><span class="r-lbl">총 탄약고</span><span class="r-val">${fmtK(total)}원</span></div>
+    <div class="r-bar" style="margin-top:6px"><span class="r-lbl">사용된 탄약</span><span class="r-val down">${fmtK(Math.round(usedAmt))}원</span></div>
+    <div class="r-bar suc" style="margin-top:6px"><span class="r-lbl">잔여 탄약고</span><span class="r-val">${fmtK(Math.round(remaining))}원</span></div>
+    <div class="prog-wrap"><div class="prog-bar"><div class="prog-fill" style="width:${pct.toFixed(0)}%;background:${fc}"></div></div>
+    <div class="prog-text"><span>잔여 ${pct.toFixed(0)}%</span><span>사용 ${(100-pct).toFixed(0)}%</span></div></div>`;
 }
 
-function calcSell() {
-  const avg = parseFloat(document.getElementById('avgCost').value);
-  const cur = parseFloat(document.getElementById('curPrice').value);
-  const el = document.getElementById('sellResult');
-  if (!avg || !cur) { el.innerHTML = ''; return; }
-  const gain = ((cur - avg) / avg) * 100;
-  let boxClass = '', emoji = '', msg = '', action = '';
-  if (gain >= 200) {
-    boxClass = 'danger-box'; emoji = '🚨';
-    msg = `+${gain.toFixed(1)}% — 2차 매도 조건 충족`;
-    action = '보유량의 30% 추가 매도 → QLD 편입';
-  } else if (gain >= 100) {
-    boxClass = 'warn-box'; emoji = '⚠';
-    msg = `+${gain.toFixed(1)}% — 1차 매도 조건 충족`;
-    action = '보유량의 50% 매도 → QLD 편입 (원금 회수)';
-  } else {
-    msg = `수익률 ${gain >= 0 ? '+' : ''}${gain.toFixed(1)}%`;
-    action = `목표 +100%까지 ${(100 - gain).toFixed(1)}% 남음`;
-  }
-  el.innerHTML = `
-    <div class="sell-detail ${boxClass}" style="margin-top:10px">
-      <div style="font-size:14px;font-weight:700;color:#37352f;margin-bottom:4px">${emoji} ${msg}</div>
-      <div style="font-size:12px;color:#787774">${action}</div>
-    </div>
-  `;
+function calcSell(){
+  const avg=parseFloat(document.getElementById('avgCost').value);
+  const cur=parseFloat(document.getElementById('curPrice').value);
+  const el=document.getElementById('sellResult');
+  if(!avg||!cur){el.innerHTML='';return;}
+  const gain=((cur-avg)/avg)*100;
+  let cls='',emoji='',msg='',action='';
+  if(gain>=200){cls='dng';emoji='🚨';msg=`+${gain.toFixed(1)}% — 2차 매도 조건 충족`;action='보유량의 30% 추가 매도 → QLD 편입';}
+  else if(gain>=100){cls='wrn';emoji='⚠';msg=`+${gain.toFixed(1)}% — 1차 매도 조건 충족`;action='보유량의 50% 매도 → QLD 편입 (원금 회수)';}
+  else{msg=`수익률 ${gain>=0?'+':''}${gain.toFixed(1)}%`;action=`목표 +100%까지 ${(100-gain).toFixed(1)}% 남음`;}
+  el.innerHTML=`<div class="sell-box ${cls}" style="margin-top:10px"><div style="font-size:14px;font-weight:700;color:#37352f;margin-bottom:4px">${emoji} ${msg}</div><div style="font-size:12px;color:#787774">${action}</div></div>`;
 }
+
+// 페이지 로드 시 자동으로 데이터 가져오기
+window.addEventListener('load', fetchData);
 </script>
 </body>
 </html>
